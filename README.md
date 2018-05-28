@@ -1,11 +1,12 @@
-﻿# Angular 5 Universal with Spring Boot 2.0.0.RELEASE Template
+﻿# Angular 5 Spring Boot 2 angularng nosql -- appli web and mobile to pointe your working times.
 
 ## Requirements 
 - Java 1.8
 - Apache Maven 3.5.2
 - Node.js 8.9.3
+- Eclipse or Intelij
 
-## Front
+## Front end
 
 Prepare:
 - `npm install`
@@ -19,7 +20,7 @@ Deploy build:
 
 Navigate to `http://localhost:4200/`.
 
-## Back
+## Back end
 
 Development run:
 - `run cloud.templates.TemplateApplication class in your IDE`
@@ -28,6 +29,5 @@ Deploy build:
 - `uncomment tomcat dependency in pom.xml`
 - `mvn clean package`
 
-## Advices
 
-Java part using Lombok library. If you run project in Intellij Idea, you may need enable annotation processing in Settings->Build->Compiler->Annotation Processor, also install Lombok plugin in Settings->Plugins.
+API to `http://localhost:8080/service`.
