@@ -26,9 +26,21 @@ function register(req, res, next) {
 }
 
 function getAll(req, res, next) {
-    userService.getAll()
+
+    res.locals.connection.query('SELECT * from users', function (error, results, fields) {
+        if(error){
+            res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
+            //If there is error, we send the error in the error section with 500 status
+        } else {
+            res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+            //If there is no error, all is good and response is 200OK.
+        }
+    });
+
+
+    /* userService.getAll()
         .then(users => res.json(users))
-        .catch(err => next(err));
+        .catch(err => next(err)); */
 }
 
 function getCurrent(req, res, next) {
