@@ -10,7 +10,7 @@ var jwtCheck = jwt({
 });
 
 function getAllProjectsOnDb(done){
-    db.get().query('SELECT * FROM projects', function(err, rows) {
+    db.get().query('SELECT * FROM projectuser WHERE active=1', function(err, rows) {
         if (err) throw err;
         done(rows);
     });
@@ -18,35 +18,36 @@ function getAllProjectsOnDb(done){
 
 app.use('/api/', jwtCheck);
 
-app.get('/api/projects', function(req, res) {
+app.get('/api/projectuser', function(req, res) {
     getAllProjectsOnDb(function(result) {
       res.status(200).send(result);
   });
 });
 
 function getProjectDB(projectname, done) {
-    db.get().query('SELECT * FROM projects WHERE projectname = ? LIMIT 1', [projectname], function(err, rows, fields) {
+    db.get().query('SELECT * FROM projectuser WHERE projectid = ? LIMIT 1', [projectname], function(err, rows, fields) {
       if (err) throw err;
       //console.log(rows[0]);
       done(rows[0]);
     });
   }
 
-  app.get('/api/projects/id', function(req, res) {
+  app.get('/api/projectuser/id', function(req, res) {
     getProjectDB(req.project.username, function(rows){
       res.status(201).send(rows);
     });
   });
 
-app.post('/api/projects/create', function(req, res) {  
-    if (!req.body.projectname) {
-      return res.status(400).send("You must send the project name");
+app.post('/api/projectuser/create', function(req, res) {  
+    if (!req.body.userid || !req.body.projectid) {
+      return res.status(400).send("You must send the project and user afectation");
     }
   
     getProjectDB(req.body.projectname, function(project){
       if(!project) {
         project = {
             projectname: req.body.projectname,
+            active: req.body.active,
             color: req.body.color
         };
         db.get().query('INSERT INTO projects SET ?', [project], function(err, result){
@@ -54,6 +55,7 @@ app.post('/api/projects/create', function(req, res) {
           newProject = {
             id: result.insertId,
             projectname: project.projectname,
+            active: project.active,
             color: req.body.color
           };
 
